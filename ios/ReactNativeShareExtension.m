@@ -97,14 +97,11 @@ RCT_REMAP_METHOD(data,
                     callback([url absoluteString], @"text/plain", nil);
                 }
             }];
-        } else if (imageProvider) {
-            [imageProvider loadItemForTypeIdentifier:IMAGE_IDENTIFIER options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
-                NSURL *url = (NSURL *)item;
-
-                if(callback) {
-                    callback([url absoluteString], [[[url absoluteString] pathExtension] lowercaseString], nil);
-                }
-            }];
+        // Note: temporarily removing imageProvider handling because the
+        // existing implementation treated all attachments with identifier
+        // `public.image` as a filepath/url, when in fact a number of apps send
+        // a UIImage with the same identifier (which causes a crash). @todo:
+        // fix for this in native
         } else if (textProvider) {
             [textProvider loadItemForTypeIdentifier:TEXT_IDENTIFIER options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
                 NSString *text = (NSString *)item;
